@@ -288,7 +288,7 @@
     </div>
 
     <script>
-        // Enlace nuevo de Google Apps Script integrado
+        // Enlace de Google Apps Script integrado
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyTHdSe8dCBr1mgu1nxvsjnpX1IFaKFBtuHe1FlOISuQnvGDGs4pXTXLphKLI-VeAK0/exec';
 
         function toggleLegalInfo() {
@@ -427,25 +427,20 @@
             }
         });
 
+        // Botón Limpiar: Limpia los campos del cliente sin tocar el número de recibo actual
         document.getElementById('reset-btn').addEventListener('click', () => {
-            document.getElementById('transaction-form').reset();
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const formattedDate = today.toISOString().split('T')[0];
-
-            inputDate.value = formattedDate;
-            previewDate.innerText = formatDateDisplay(formattedDate);
-            
-            const defaultReceiptNo = `PBV-${year}${month}-01`;
-            inputReceiptNo.value = defaultReceiptNo;
-            previewReceiptNo.innerText = defaultReceiptNo;
+            inputClientName.value = '';
+            inputClientDoc.value = '';
+            inputDescription.value = '';
+            inputItemValue.value = '';
+            inputSubsidy.value = '';
 
             previewClient.innerText = '---';
             previewDoc.innerText = '---';
             previewDescription.innerText = '---';
+            
             calculateValues();
-            showToast('Formulario restablecido.');
+            showToast('Formulario limpiado (Número de recibo conservado).');
         });
 
         // Descarga de PDF individual
