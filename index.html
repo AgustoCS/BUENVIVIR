@@ -288,8 +288,8 @@
     </div>
 
     <script>
-        // URL de tu Web App de Google Apps Script vinculada al Sheets
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw5whWz-Nb52W4r2gNnGGIm1E3-K5FpK8UDemSIeNFs_rUsyyz6rtVxaYAp8Uoro7Ar/exec';
+        // Enlace nuevo de Google Apps Script integrado
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyTHdSe8dCBr1mgu1nxvsjnpX1IFaKFBtuHe1FlOISuQnvGDGs4pXTXLphKLI-VeAK0/exec';
 
         function toggleLegalInfo() {
             const content = document.getElementById('legal-content');
@@ -378,27 +378,31 @@
             previewDate.innerText = formatDateDisplay(e.target.value);
         });
 
-        // Evento de envío del formulario (Guarda en Sheets mediante FormData)
+        // Evento de envío del formulario (Guarda en Sheets y actualiza)
         document.getElementById('transaction-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             showToast('Guardando en Google Sheets...');
 
-            const formData = new FormData();
-            formData.append('fecha', inputDate.value);
-            formData.append('reciboNo', inputReceiptNo.value);
-            formData.append('cliente', inputClientName.value);
-            formData.append('dpi', inputClientDoc.value);
-            formData.append('descripcion', inputDescription.value);
-            formData.append('valorTotal', inputItemValue.value);
-            formData.append('subsidio', inputSubsidy.value);
-            formData.append('totalNeto', totalToPayDisplay.innerText.replace('Q ', ''));
+            const datosRecibo = {
+                fecha: inputDate.value,
+                reciboNo: inputReceiptNo.value,
+                cliente: inputClientName.value,
+                dpi: inputClientDoc.value,
+                descripcion: inputDescription.value,
+                valorTotal: inputItemValue.value,
+                subsidio: inputSubsidy.value,
+                totalNeto: totalToPayDisplay.innerText.replace('Q ', '')
+            };
 
             try {
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
+                    body: JSON.stringify(datosRecibo)
                 });
                 showToast('¡Registro guardado en Excel con éxito!');
             } catch (error) {
